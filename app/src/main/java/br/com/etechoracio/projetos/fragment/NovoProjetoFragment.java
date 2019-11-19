@@ -3,14 +3,23 @@ package br.com.etechoracio.projetos.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import br.com.etechoracio.projetos.APIConstants;
 import br.com.etechoracio.projetos.R;
 import br.com.etechoracio.projetos.model.Projeto;
+import br.com.etechoracio.projetos.service.ProjetoAPIService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class NovoProjetoFragment extends Fragment {
 
@@ -49,7 +58,24 @@ public class NovoProjetoFragment extends Fragment {
                 projeto.setTurma(editTurma.getText().toString());
 
 
+                ProjetoAPIService service = new Retrofit.Builder().baseUrl(APIConstants.API_URL)
+                        .addConverterFactory(JacksonConverterFactory.create())
+                        .build()
+                        .create(ProjetoAPIService.class);
 
+
+                Call<Void> call = service.save(projeto);
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+
+                            Toast.makeText(getContext(), "Cadastrado com sucesso", Toast.LENGTH_SHORT).show();
+                        }
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Log.e("ProjetoAPIService ", "Erro:" + t.getMessage());
+                        }
+                    });
 
             }
         });

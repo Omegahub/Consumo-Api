@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import br.com.etechoracio.projetos.APIConstants;
 import br.com.etechoracio.projetos.R;
 import br.com.etechoracio.projetos.adapter.ProjetoAdapter;
 import br.com.etechoracio.projetos.model.Projeto;
@@ -40,7 +41,7 @@ public class ListagemProjetoFragment extends Fragment {
                              ViewGroup container,
                              Bundle savedInstanceState) {
 
-        this.service = new Retrofit.Builder().baseUrl("http://exapi.somee.com/api/Projetos/")
+        this.service = new Retrofit.Builder().baseUrl(APIConstants.API_URL)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build()
                 .create(ProjetoAPIService.class);
